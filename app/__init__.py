@@ -1,1 +1,0 @@
-"""TrialAudit Hub application package."""
