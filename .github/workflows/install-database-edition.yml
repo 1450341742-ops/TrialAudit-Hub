@@ -29,16 +29,16 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          if [ ! -f bundle.part08 ]; then
-            echo "Bundle parts are not complete yet."
+          if [ ! -f source.part13 ]; then
+            echo "Source parts are not complete yet."
             exit 0
           fi
-          cat bundle.part* | base64 --decode > bundle.zip
-          python -m zipfile -t bundle.zip
-          python -m zipfile -e bundle.zip .
+          cat source.part* | base64 --decode > source.tar.xz
+          xz --test source.tar.xz
+          tar -xJf source.tar.xz
           test -f supabase/schema.sql
           test -f streamlit_app.py
-          rm -f bundle.zip bundle.part* install.log install-exit-code.txt .install-trigger .github/workflows/unpack.yml
+          rm -f source.tar.xz source.part* bundle.part* bundle.zip install.log install-exit-code.txt .install-trigger .github/workflows/unpack.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
