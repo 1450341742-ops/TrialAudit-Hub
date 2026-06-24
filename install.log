@@ -1,0 +1,50 @@
++ pwd
+/home/runner/work/TrialAudit-Hub/TrialAudit-Hub
++ ls -la
+total 40
+drwxr-xr-x 4 runner runner  4096 Jun 24 10:18 .
+drwxr-xr-x 3 runner runner  4096 Jun 24 10:18 ..
+drwxr-xr-x 7 runner runner  4096 Jun 24 10:18 .git
+drwxr-xr-x 3 runner runner  4096 Jun 24 10:18 .github
+-rw-r--r-- 1 runner runner     6 Jun 24 10:18 .install-trigger
+-rw-r--r-- 1 runner runner 15009 Jun 24 10:18 bundle.zip
+-rw-r--r-- 1 runner runner    63 Jun 24 10:18 install.log
++ file bundle.zip
+bundle.zip: Zip archive data, at least v1.0 to extract, compression method=store
++ python -m zipfile -l bundle.zip
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/usr/lib/python3.12/zipfile/__main__.py", line 4, in <module>
+    main()
+  File "/usr/lib/python3.12/zipfile/__init__.py", line 2284, in main
+    with ZipFile(src, 'r', metadata_encoding=encoding) as zf:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/zipfile/__init__.py", line 1365, in __init__
+    self._RealGetContents()
+  File "/usr/lib/python3.12/zipfile/__init__.py", line 1432, in _RealGetContents
+    raise BadZipFile("File is not a zip file")
+zipfile.BadZipFile: File is not a zip file
++ python -m zipfile -e bundle.zip .
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/usr/lib/python3.12/zipfile/__main__.py", line 4, in <module>
+    main()
+  File "/usr/lib/python3.12/zipfile/__init__.py", line 2289, in main
+    with ZipFile(src, 'r', metadata_encoding=encoding) as zf:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/zipfile/__init__.py", line 1365, in __init__
+    self._RealGetContents()
+  File "/usr/lib/python3.12/zipfile/__init__.py", line 1432, in _RealGetContents
+    raise BadZipFile("File is not a zip file")
+zipfile.BadZipFile: File is not a zip file
++ rm -f bundle.zip .install-trigger .github/workflows/unpack.yml
++ git config user.name 'github-actions[bot]'
++ git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
++ git status --short
+ D .github/workflows/unpack.yml
+ D .install-trigger
+ D bundle.zip
+?? install.log
++ git add -A
