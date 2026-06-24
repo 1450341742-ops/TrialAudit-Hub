@@ -25,37 +25,22 @@ jobs:
           ref: codex/build-trialaudit-hub-mvp
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Install application source
-        id: install
-        continue-on-error: true
+      - name: Rebuild and install application source
         shell: bash
         run: |
-          set +e
-          {
-            set -x
-            pwd
-            ls -la
-            file bundle.zip
-            python -m zipfile -l bundle.zip
-            python -m zipfile -e bundle.zip .
-            rm -f bundle.zip .install-trigger .github/workflows/unpack.yml
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git status --short
-            git add -A
-            git commit -m "Install Supabase database edition" || true
-            git push --force origin HEAD:codex/build-trialaudit-hub-mvp
-          } > install.log 2>&1
-          code=$?
-          echo "$code" > install-exit-code.txt
-          cat install.log
-          exit 0
-      - name: Upload installer diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: database-installer-log
-          path: |
-            install.log
-            install-exit-code.txt
-          retention-days: 1
+          set -euxo pipefail
+          if [ ! -f bundle.part08 ]; then
+            echo "Bundle parts are not complete yet."
+            exit 0
+          fi
+          cat bundle.part* | base64 --decode > bundle.zip
+          python -m zipfile -t bundle.zip
+          python -m zipfile -e bundle.zip .
+          test -f supabase/schema.sql
+          test -f streamlit_app.py
+          rm -f bundle.zip bundle.part* install.log install-exit-code.txt .install-trigger .github/workflows/unpack.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Install Supabase database edition"
+          git push --force origin HEAD:codex/build-trialaudit-hub-mvp
